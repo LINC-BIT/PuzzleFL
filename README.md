@@ -8,7 +8,7 @@
 - [3 Supported models](#3-supported-models-in-image-classification)
 - [4 Experiments setting](#4-Experiments-setting)
   * [4.1 Generate task](#41-Generate-task)
-  * [4.2 Selection of hyperparameters](#42-Selection-of-hyperparameters)
+  * [4.2 Selection of model](#43-Selection-of-model)
 - [5 Experiments](#5-Experiments)
   * [5.1 Under different workloads (model and dataset)](#51-under-different-workloads-model-and-dataset)
   * [5.2 Under different network bandwidths](#52-under-different-network-bandwidths)
@@ -109,7 +109,7 @@ Arguments:
 ## 4 Experiments setting
 ### 4.1 Generate task
 #### 4.1.1 Dataset introduction
-* [Cifar100](http://www.cs.toronto.edu/~kriz/cifar.html): Cifar100 dataset  has a total of 50000 training samples (500 ones per class) and 10000 test samples (100 ones per class) in 100 different classes.
+- [Cifar100](http://www.cs.toronto.edu/~kriz/cifar.html): Cifar100 dataset  has a total of 50000 training samples (500 ones per class) and 10000 test samples (100 ones per class) in 100 different classes.
 - [MiniImageNet](https://image-net.org/download.php):MiniImageNet dataset has a total of 50000 training samples (500 ones per class) and 10000 test samples (100 ones per class) in 100 different classes.
 - [TinyImageNet](http://cs231n.stanford.edu/tiny-imagenet-200.zip): TinyImageNet dataset has a total of 100000 training samples (500 ones per class) and 10000 test samples (50 ones per class) in 200 different classes.
 - [ASC](http://www.cs.toronto.edu/~kriz/cifar.html): ASC dataset has a total of 95000 training samples (500 ones per class) and 9500 test samples (100 ones per class) in 100 different classes.
@@ -204,4 +204,166 @@ def noniid(dataset, num_users, shard_per_user, num_classes, dataname, rand_set_a
     test = []
     return dict_users, rand_set_all
 ```
+### 4.2 Selection of model
+PuzzleFL supports a variety of models and can easily add new ones. Based on PyTorch, simply specify the number of tasks and the total number of categories in the model.
+```shell
+class SixCNN(nn.Module):
+    def __init__(self, inputsize, outputsize=100,nc_per_task = 10):
+        super().__init__()
+        self.outputsize = outputsize
+        self.feature_net = CifarModel(inputsize)
+        self.last = nn.Linear(1024, outputsize, bias=False)
+        self.nc_per_task = nc_per_task
+    def forward(self, x, t=-1, pre=False, is_cifar=True, avg_act=False):
+        h,hidden = self.feature_net(x, avg_act)
+        output = self.last(h)
+        if is_cifar and t != -1:
+            # make sure we predict classes within the current task
+            if pre:
+                offset1 = 0
+                offset2 = int(t * self.nc_per_task)
+            else:
+                offset1 = int(t * self.nc_per_task)
+                offset2 = int((t + 1) * self.nc_per_task)
+            if offset1 > 0:
+                output[:, :offset1].data.fill_(-10e10)
+            if offset2 < self.outputsize:
+                output[:, offset2:self.outputsize].data.fill_(-10e10)
+        if avg_act is True:
+            return output,hidden
+        return output
+```
 
+## 5 Experiment
+### 5.1 Running on Cifar100
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+- **Launch the server:**
+```shell
+## Run on 20 Jetson devices
+python multi/server.py --epochs=150 --num_users=20 --frac=0.4 --ip=127.0.0.1:8000
+```
+**Note：--ip=127.0.0.1:8000 here means that the local machine is used as the center server. If there is an existing server, it can be replaced with the IP address of the server.**
+
+- **Launch the clients:**
+* 6-layer CNN on Cifar100
+    ```shell
+   ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrain.py --client_id=$i --model=6_layerCNN --dataset=cifar100 --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
+   done
+   ```
+* ResNet18 on Cifar100
+   ```shell
+     ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrain.py --client_id=$i --model=ResNet --dataset=cifar100 --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.0008 --optim=SGD --lr_decay=1e-5 --ip=127.0.0.1:8000
+   done
+   ```
+**Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
+
+### 5.2 Running on MiniImgaeNet
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+- **Launch the server:**
+```shell
+## Run on 20 Jetson devices
+python multi/server.py --epochs=150 --num_users=20 --frac=0.4 --ip=127.0.0.1:8000
+```
+**Note：--ip=127.0.0.1:8000 here means that the local machine is used as the center server. If there is an existing server, it can be replaced with the IP address of the server.**
+
+- **Launch the clients:**
+* MobiNet on MiniImgaeNet
+    ```shell
+   ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrain.py --client_id=$i --model=Mobinet --dataset=MiniImgaeNet --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
+   done
+   ```
+* DenseNet on MiniImgaeNet
+   ```shell
+     ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrain.py --client_id=$i --model=DenseNet --dataset=MiniImgaeNet --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.0008 --optim=SGD --lr_decay=1e-5 --ip=127.0.0.1:8000
+   done
+   ```
+**Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
+
+### 5.3 Running on TinyImageNet
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+- **Launch the server:**
+```shell
+## Run on 10 Jetson devices
+python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:8000
+```
+**Note：--ip=127.0.0.1:8000 here means that the local machine is used as the center server. If there is an existing server, it can be replaced with the IP address of the server.**
+
+- **Launch the clients:**
+* Vit on TinyImageNet
+    ```shell
+   ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrain.py --client_id=$i --model=vit --dataset=TinyImageNet --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
+   done
+   ```
+* Pit on TinyImageNet
+   ```shell
+     ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrain.py --client_id=$i --model=pit --dataset=TinyImageNet --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.0008 --optim=SGD --lr_decay=1e-5 --ip=127.0.0.1:8000
+   done
+   ```
+**Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
+
+### 5.4 Running on ASC
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+- **Launch the server:**
+```shell
+## Run on 10 Jetson devices
+python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:8000
+```
+**Note：--ip=127.0.0.1:8000 here means that the local machine is used as the center server. If there is an existing server, it can be replaced with the IP address of the server.**
+
+- **Launch the clients:**
+* RNN on ASC
+    ```shell
+   ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrainNLP.py --client_id=$i --model=rnn --dataset=ASC --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
+   done
+   ```
+* LSTM on ASC
+   ```shell
+     ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+       python multi/ClientTrainNLP.py --client_id=$i --model=lstm --dataset=ASC --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.0008 --optim=SGD --lr_decay=1e-5 --ip=127.0.0.1:8000
+   done
+   ```
+**Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
+
+### 5.5 Running on DSC
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+- **Launch the server:**
+```shell
+## Run on 10 Jetson devices
+python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:8000
+```
+**Note：--ip=127.0.0.1:8000 here means that the local machine is used as the center server. If there is an existing server, it can be replaced with the IP address of the server.**
+
+- **Launch the clients:**
+* bert on DSC
+    ```shell
+   ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrainNLP.py --client_id=$i --model=bert --dataset=DSC --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
+   done
+   ```
+### 5.2 Result
+- **The accuracy trend overtime time under different workloads**(X-axis represents the time and Y-axis represents the inference accuracy)
+    ![](https://github.com/LINC-BIT/FedKNOW/blob/main/Experiment%20images/difworkerloader.png)
