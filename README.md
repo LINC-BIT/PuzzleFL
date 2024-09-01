@@ -10,12 +10,12 @@
   * [4.1 Generate task](#41-Generate-task)
   * [4.2 Selection of model](#43-Selection-of-model)
 - [5 Experiments](#5-Experiments)
-  * [5.1 Under different workloads (model and dataset)](#51-under-different-workloads-model-and-dataset)
-  * [5.2 Under different network bandwidths](#52-under-different-network-bandwidths)
-  * [5.3 Large scale](#53-large-scale)
-  * [5.4 Long task sequence](#54-long-task-sequence)
-  * [5.5 Under different parameter settings](#55-under-different-parameter-settings)
-  * [5.6 Applicability on different networks](#56-applicability-on-different-networks)
+  * [5.1 Running on Cifar100](#51-under-different-workloads-model-and-dataset)
+  * [5.2 Running on MiniImageNet](#52-under-different-network-bandwidths)
+  * [5.3 Running on TinyImageNet](#53-large-scale)
+  * [5.4 Running on ASC](#54-long-task-sequence)
+  * [5.5 Running on DSC](#55-under-different-parameter-settings)
+  * [5.6 Result]
 
 ## 1 Introduction
 PuzzleFL is designed to achieve SOTA performance (accuracy, time, and communication cost etc.) in decetralized federated continual learning setting. It currently supports six differnet networks of image/text classification: ResNet, MobiNet, DenseNet, ViT, RNN, LSTM and Bert. 
@@ -364,6 +364,6 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
        python multi/ClientTrainNLP.py --client_id=$i --model=bert --dataset=DSC --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
    done
    ```
-### 5.2 Result
+### 5.6 Result
 - **The accuracy trend overtime time under different workloads**(X-axis represents the time and Y-axis represents the inference accuracy)
     ![](https://github.com/LINC-BIT/FedKNOW/blob/main/Experiment%20images/difworkerloader.png)
