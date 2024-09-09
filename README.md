@@ -15,7 +15,8 @@
   * [5.3 Running on TinyImageNet](#53-large-scale)
   * [5.4 Running on ASC](#54-long-task-sequence)
   * [5.5 Running on DSC](#55-under-different-parameter-settings)
-  * [5.6 Result]
+  * [5.6 Result](#56-result)
+- [6 Citations](#6-citation)
 
 ## 1 Introduction
 PuzzleFL is designed to achieve SOTA performance (accuracy, time, and communication cost etc.) in decetralized federated continual learning setting. It currently supports six differnet networks of image/text classification: ResNet, MobiNet, DenseNet, ViT, RNN, LSTM and Bert. 
@@ -50,13 +51,13 @@ PuzzleFL is designed to achieve SOTA performance (accuracy, time, and communicat
 
 3. Clone this repository and install the dependencies.
   ```shell
-  git clone https://github.com/LINC-BIT/PuzzleFL/
+  git clone https://github.com/LINC-BIT/PuzzleFL.git
   pip install -r requirements.txt
   ```
 ### 2.2 Usage
 Run PuzzleFL or the baselines:
 ```shell
-python ClientTrainPuzzleFL/main_PuzzleFL.py(or other baselines) --dataset [dataset] --model [mdoel]
+python PuzzleFL/main_PuzzleFL.py(or other baselines) --dataset [dataset] --model [mdoel]
 --num_users [num_users]  --shard_per_user [shard_per_user] --frac [frac] 
 --local_bs [local_bs] --lr [lr] --task [task] --epoch [epoch]  --local_ep 
 [local_ep] --local_local_ep [local_local_ep] --store_rate [store_rate] 
@@ -367,3 +368,89 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
 ### 5.6 Result
 - **The accuracy trend overtime time under different workloads**(X-axis represents the time and Y-axis represents the inference accuracy)
     ![](https://github.com/LINC-BIT/PuzzleFL/blob/main/result.png)
+
+
+### 6 Citation
+The citations of the baseline methods in `baselines/` are listed as follows: 
+
+#### DFL methods:
+- GOSSIP
+    ```bibtex
+    @inproceedings{mcmahan2017communication,
+    title={Communication-efficient learning of deep networks from decentralized data},
+    author={McMahan, Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and y Arcas, Blaise Aguera},
+    booktitle={Artificial intelligence and statistics},
+    pages={1273--1282},
+    year={2017},
+    organization={PMLR}
+    }
+
+- PENS
+    ```bibtex
+    @article{onoszko2021decentralized,
+    title={Decentralized federated learning of deep neural networks on non-iid data},
+    author={Onoszko, Noa and Karlsson, Gustav and Mogren, Olof and Zec, Edvin Listo},
+    journal={arXiv preprint arXiv:2107.08517},
+    year={2021}
+    }
+
+- FedHP 
+    ```bibtex
+    @inproceedings{liao2023adaptive,
+    title={Adaptive configuration for heterogeneous participants in decentralized federated learning},
+    author={Liao, Yunming and Xu, Yang and Xu, Hongli and Wang, Lun and Qian, Chen},
+    booktitle={IEEE INFOCOM 2023-IEEE Conference on Computer Communications},
+    pages={1--10},
+    year={2023},
+    organization={IEEE}
+    }
+
+
+- HDFL 
+    ```bibtex
+    @inproceedings{zhang2023novel,
+    title={A Novel Hierarchically Decentralized Federated Learning Framework in 6G Wireless Networks},
+    author={Zhang, Jie and Chen, Li and Chen, Xiaohui and Wei, Guo},
+    booktitle={IEEE INFOCOM 2023-IEEE Conference on Computer Communications Workshops (INFOCOM WKSHPS)},
+    pages={1--6},
+    year={2023},
+    organization={IEEE}
+    }
+
+#### FCL methods:
+
+- FedWEIT 
+    ```bibtex
+    @inproceedings{yoon2021federated,
+    title={Federated continual learning with weighted inter-client transfer},
+    author={Yoon, Jaehong and Jeong, Wonyong and Lee, Giwoong and Yang, Eunho and Hwang, Sung Ju},
+    booktitle={International Conference on Machine Learning},
+    pages={12073--12086},
+    year={2021},
+    organization={PMLR}
+    }
+
+
+- FedKNOW
+    ```bibtex
+    @inproceedings{luopan2023fedknow,
+    title={Fedknow: Federated continual learning with signature task knowledge integration at edge},
+    author={Luopan, Yaxin and Han, Rui and Zhang, Qinglong and Liu, Chi Harold and Wang, Guoren and Chen, Lydia Y},
+    booktitle={2023 IEEE 39th International Conference on Data Engineering (ICDE)},
+    pages={341--354},
+    year={2023},
+    organization={IEEE}
+    }
+
+
+- FedViT
+    ```bibtex
+    @article{zuo2024fedvit,
+    title={FedViT: Federated continual learning of vision transformer at edge},
+    author={Zuo, Xiaojiang and Luopan, Yaxin and Han, Rui and Zhang, Qinglong and Liu, Chi Harold and Wang, Guoren and Chen, Lydia Y},
+    journal={Future Generation Computer Systems},
+    volume={154},
+    pages={1--15},
+    year={2024},
+    publisher={Elsevier}
+    }
