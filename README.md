@@ -15,7 +15,8 @@
   * [5.3 Running on TinyImageNet](#53-large-scale)
   * [5.4 Running on ASC](#54-long-task-sequence)
   * [5.5 Running on DSC](#55-under-different-parameter-settings)
-  * [5.6 Result](#56-result)
+  * [5.6 Running on MiniGC](#55-under-different-parameter-settings)
+  * [5.7 Result](#56-result)
 - [6 Citations](#6-citation)
 
 ## 1 Introduction
@@ -27,6 +28,7 @@ PuzzleFL is designed to achieve SOTA performance (accuracy, time, and communicat
 - [RNN](): RNN (Recurrent Neural Network) is a type of neural network specifically designed for sequential data, excelling at handling time series and natural language with temporal dependencies.
 - [LSTM](): LSTM (Long Short-Term Memory) is a special type of RNN that can learn long-term dependencies, suitable for tasks like time series analysis and language modeling.
 - [Bert](): BERT (Bidirectional Encoder Representations from Transformers) is a pre-trained language representation model based on the Transformer architecture, which captures contextual information in text through deep bidirectional training. The BERT model excels in natural language processing (NLP) tasks and can be used for various applications such as text classification, question answering systems, and named entity recognition.
+- [GCN](): Graph Convolutional Network (GCN) is a deep learning framework designed to process graph-structured data by iteratively aggregating features from neighboring nodes to learn meaningful node representations for tasks like node classification or link prediction.
 
 ## 2 How to get started
 ### 2.1 Setup
@@ -65,9 +67,9 @@ python PuzzleFL/main_PuzzleFL.py(or other baselines) --dataset [dataset] --model
 ```
 Arguments:
 
-- `dataset` : the dataset, e.g. `cifar100`, `MiniImageNet`, `TinyImageNet`, `ASC`, `DSC`
+- `dataset` : the dataset, e.g. `cifar100`, `MiniImageNet`, `TinyImageNet`, `ASC`, `DSC`, `MiniGC`
 
-- `model`: the model, e.g. `6-Layers CNN`, `ResNet18`, `DenseNet`, `MobiNet`, `RNN`, `LSTM`, `Bert`
+- `model`: the model, e.g. `6-Layers CNN`, `ResNet18`, `DenseNet`, `MobiNet`, `RNN`, `LSTM`, `Bert`, `GCN`
 
 - `num_users`: the number of clients
 
@@ -115,6 +117,7 @@ Arguments:
 - [TinyImageNet](http://cs231n.stanford.edu/tiny-imagenet-200.zip): TinyImageNet dataset has a total of 100000 training samples (500 ones per class) and 10000 test samples (50 ones per class) in 200 different classes.
 - [ASC](http://www.cs.toronto.edu/~kriz/cifar.html): ASC dataset has a total of 95000 training samples (500 ones per class) and 9500 test samples (100 ones per class) in 100 different classes.
 - [DSC](https://image-net.org/download.php): DSC dataset has a total of 50000 training samples (500 ones per class) and 10000 test samples (100 ones per class) in 100 different classes.
+- [MiniGC](https://image-net.org/download.php): The MiniGC dataset is a dataset containing 8 different types of graphs, suitable for research and experimentation in graph neural networks (GNNs). Specific categories include cyclic graphs, star graphs, wheel graphs, lollipop graphs, hypercube graphs, grid graphs, group graphs, and circular trapezoid graphs.
 
 #### 4.1.2 Task split method
 According to the definition of tasks, we use the continual learning [dataset splitting method](https://openaccess.thecvf.com/content_cvpr_2017/html/Rebuffi_iCaRL_Incremental_Classifier_CVPR_2017_paper.html) to split these datasets into multiple tasks. Each tasks have data samples of different class and is assigned a unique task ID. 
@@ -138,6 +141,10 @@ Before building the dataloader, we split each dataset, as follows:
 - split DSC into 10 tasks
 	```shell
 	python dataset/dsc.py --task_number=20 --class_number=100
+	```
+ - split MiniGC into 10 tasks
+	```shell
+ 	python dataset/dsc.py --task_number=20 --class_number=100
 	```
 #### 4.1.3 Task allocation method
 Under the setting of FCL, each client has its own private task sequence, so we allocate each task to all clients in the form of Non-IID according to the method of [FedRep](http://proceedings.mlr.press/v139/collins21a). 
@@ -265,7 +272,7 @@ python multi/server.py --epochs=150 --num_users=20 --frac=0.4 --ip=127.0.0.1:800
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
 ### 5.2 Running on MiniImgaeNet
-We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on MiniImgaeNet, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
 ## Run on 20 Jetson devices
@@ -293,7 +300,7 @@ python multi/server.py --epochs=150 --num_users=20 --frac=0.4 --ip=127.0.0.1:800
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
 ### 5.3 Running on TinyImageNet
-We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on TinyImageNet, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
 ## Run on 10 Jetson devices
@@ -321,7 +328,7 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
 ### 5.4 Running on ASC
-We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on ASC, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
 ## Run on 10 Jetson devices
@@ -348,7 +355,7 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
 ### 5.5 Running on DSC
-We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on DSC, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
 ## Run on 10 Jetson devices
@@ -365,7 +372,26 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
        python multi/ClientTrainNLP.py --client_id=$i --model=bert --dataset=DSC --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
    done
    ```
-### 5.6 Result
+
+### 5.6 Running on MiniGC
+We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on MiniGC, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
+- **Launch the server:**
+```shell
+## Run on 10 Jetson devices
+python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:8000
+```
+**Note：--ip=127.0.0.1:8000 here means that the local machine is used as the center server. If there is an existing server, it can be replaced with the IP address of the server.**
+
+- **Launch the clients:**
+* GCN on MiniGC
+    ```shell
+   ## Run on 10 Jetson devices
+   for ((i=0;i<10;i++));
+   do
+       python multi/ClientTrainNLP.py --client_id=$i --model=GCN --dataset=MiniGC --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
+   done
+   ```
+### 5.7 Result
 - **The accuracy trend overtime time under different workloads**(X-axis represents the time and Y-axis represents the inference accuracy)
     ![](https://github.com/LINC-BIT/PuzzleFL/blob/main/result.png)
 
