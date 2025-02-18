@@ -393,7 +393,7 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
    ```
 ### 5.7 Result
 - **The accuracy trend overtime time under different workloads**(X-axis represents the time and Y-axis represents the inference accuracy)
-    ![](https://github.com/LINC-BIT/PuzzleFL/blob/main/result.png)
+    ![](https://github.com/LINC-BIT/PuzzleFL/blob/main/Results.png)
 
 
 ### 6 Citation
