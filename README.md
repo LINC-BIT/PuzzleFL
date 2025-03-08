@@ -104,7 +104,7 @@ Arguments:
 
   More details refer to `utils/option.py`.
 
-## 3 Supported models in image/text classification
+## 3 Supported models and datasets in different applications
 ### 3.1 Image classification
 ||Model Name|Data|Script|
 |--|--|--|--|
