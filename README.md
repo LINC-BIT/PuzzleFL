@@ -5,7 +5,7 @@
 - [2 How to get started](#2-how-to-get-started)
   * [2.1 Setup](#21-setup)
   * [2.2 Usage](#22-usage)
-- [3 Supported models and datasets in different applications](#3-supported-models-in-image-classification)
+- [3 Supported models and datasets in different applications](#3-Supported-models-and-datasets-in-different-applications)
   * [3.1 Image classification](#31-Image-classification)
   * [3.2 Text classification](#32-Text-classification)
   * [3.3 Graph classification](#33-Graph-classification)
