@@ -19,7 +19,7 @@
 - [7 Experiment](#7-Experiment)
   * [7.1 Running on Cifar100](#71-Running-on-Cifar100)
   * [7.2 Running on MiniImageNet](#72-Running-on-MiniImageNet)
-  * [7.3 Running on TinyImageNet](#73-Running-on-TinyImageNete)
+  * [7.3 Running on TinyImageNet](#73-Running-on-TinyImageNet)
   * [7.4 Running on ASC](#74-Running-on-ASC)
   * [7.5 Running on DSC](#75-Running-on-DSC)
   * [7.6 Running on MiniGC](#76-Running-on-MiniGC)
@@ -316,7 +316,7 @@ python multi/server.py --epochs=150 --num_users=20 --frac=0.4 --ip=127.0.0.1:800
    ```
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
-### 7.2 Running on MiniImgaeNet
+### 7.2 Running on MiniImageNet
 We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on MiniImgaeNet, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
