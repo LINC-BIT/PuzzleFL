@@ -155,8 +155,8 @@ Our system not only implements PuzzleFL, but also implements classic and latest 
 - **[TFCL](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Traceable_Federated_Continual_Learning_CVPR_2024_paper.html)** : This paper is from CVPR(2024). It proposes a novel Traceable Federated Continual Learning (TFCL) paradigm, introducing the TagFed framework that decomposes models into marked sub-models for each client task, enabling precise tracing and selective federation to handle repetitive tasks effectively.
 - **[Loci](https://ieeexplore.ieee.org/abstract/document/10857343/)**: This paper is from TPDS(Volume 36, 2025)  It proposes Loci to provide abstractions for clients’ past and peer task knowledge using compact model weights, and develop a communication-efficient approach to train each client’s local model by exchanging its tasks’ knowledge with the most accuracy relevant one from other clients.
 ## 6 Experiments setting
-### 4.1 Generate task
-#### 4.1.1 Dataset introduction
+### 6.1 Generate task
+#### 6.1.1 Dataset introduction
 - [Cifar100](http://www.cs.toronto.edu/~kriz/cifar.html): Cifar100 dataset  has a total of 50000 training samples (500 ones per class) and 10000 test samples (100 ones per class) in 100 different classes.
 - [MiniImageNet](https://image-net.org/download.php):MiniImageNet dataset has a total of 50000 training samples (500 ones per class) and 10000 test samples (100 ones per class) in 100 different classes.
 - [TinyImageNet](http://cs231n.stanford.edu/tiny-imagenet-200.zip): TinyImageNet dataset has a total of 100000 training samples (500 ones per class) and 10000 test samples (50 ones per class) in 200 different classes.
@@ -164,7 +164,7 @@ Our system not only implements PuzzleFL, but also implements classic and latest 
 - [DSC](https://image-net.org/download.php): DSC dataset has a total of 50000 training samples (500 ones per class) and 10000 test samples (100 ones per class) in 100 different classes.
 - [MiniGC](https://image-net.org/download.php): The MiniGC dataset is a dataset containing 8 different types of graphs, suitable for research and experimentation in graph neural networks (GNNs). Specific categories include cyclic graphs, star graphs, wheel graphs, lollipop graphs, hypercube graphs, grid graphs, group graphs, and circular trapezoid graphs.
 
-#### 4.1.2 Task split method
+#### 6.1.2 Task split method
 According to the definition of tasks, we use the continual learning [dataset splitting method](https://openaccess.thecvf.com/content_cvpr_2017/html/Rebuffi_iCaRL_Incremental_Classifier_CVPR_2017_paper.html) to split these datasets into multiple tasks. Each tasks have data samples of different class and is assigned a unique task ID. 
 Before building the dataloader, we split each dataset, as follows:
 - split Cifar100 into 10 tasks
@@ -191,7 +191,7 @@ Before building the dataloader, we split each dataset, as follows:
 	```shell
  	python dataset/dsc.py --task_number=20 --class_number=100
 	```
-#### 4.1.3 Task allocation method
+#### 6.1.3 Task allocation method
 Under the setting of FCL, each client has its own private task sequence, so we allocate each task to all clients in the form of Non-IID according to the method of [FedRep](http://proceedings.mlr.press/v139/collins21a). 
 Specifically, we assign the task sequence of each dataset split to all clients. For each task, each client randomly selects 2-5 classes of data, and randomly obtains 10% of the training samples and test samples from the selected classes. As follows:
 ```shell
@@ -257,7 +257,7 @@ def noniid(dataset, num_users, shard_per_user, num_classes, dataname, rand_set_a
     test = []
     return dict_users, rand_set_all
 ```
-### 4.2 Selection of model
+### 6.2 Selection of model
 PuzzleFL supports a variety of models and can easily add new ones. Based on PyTorch, simply specify the number of tasks and the total number of categories in the model.
 ```shell
 class SixCNN(nn.Module):
@@ -287,8 +287,8 @@ class SixCNN(nn.Module):
         return output
 ```
 
-## 5 Experiment
-### 5.1 Running on Cifar100
+## 7 Experiment
+### 7.1 Running on Cifar100
 We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on cifar100, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
@@ -316,7 +316,7 @@ python multi/server.py --epochs=150 --num_users=20 --frac=0.4 --ip=127.0.0.1:800
    ```
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
-### 5.2 Running on MiniImgaeNet
+### 7.2 Running on MiniImgaeNet
 We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on MiniImgaeNet, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
@@ -344,7 +344,7 @@ python multi/server.py --epochs=150 --num_users=20 --frac=0.4 --ip=127.0.0.1:800
    ```
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
-### 5.3 Running on TinyImageNet
+### 7.3 Running on TinyImageNet
 We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on TinyImageNet, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
@@ -372,7 +372,7 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
    ```
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
-### 5.4 Running on ASC
+### 7.4 Running on ASC
 We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on ASC, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
@@ -399,7 +399,7 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
    ```
 **Note:** Please keep the IP addresses of the server and the client consistent. If there are multiple devices running, run the corresponding code directly on the corresponding edge device and replace it with the IP address of the server. The operating instructions of other baselines are in `scripts/difwork`.
 
-### 5.5 Running on DSC
+### 7.5 Running on DSC
 We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on DSC, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
@@ -418,7 +418,7 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
    done
    ```
 
-### 5.6 Running on MiniGC
+### 7.6 Running on MiniGC
 We selected 10 Jetson and rasberry devices with different memory and different computing speeds to test on MiniGC, including 2 Jetson-nano devices with 4GB memory, 2 Jetson-Xavier-NX with 16GB memory, 2 Jetson-AgX with 32GB memory and rasberry pi with 4GB memory.
 - **Launch the server:**
 ```shell
@@ -436,12 +436,12 @@ python multi/server.py --epochs=150 --num_users=10 --frac=0.4 --ip=127.0.0.1:800
        python multi/ClientTrainNLP.py --client_id=$i --model=GCN --dataset=MiniGC --num_classes=100 --task=10 --alg=PuzzleFL --lr=0.001 --optim=Adam --lr_decay=1e-4 --ip=127.0.0.1:8000
    done
    ```
-### 5.7 Result
+### 7.7 Result
 - **The accuracy trend overtime time under different workloads**(X-axis represents the time and Y-axis represents the inference accuracy)
     ![](https://github.com/LINC-BIT/PuzzleFL/blob/main/Results.png)
 
 
-### 6 Citation
+### 8 Citation
 The citations of the baseline methods in `baselines/` are listed as follows: 
 
 #### DFL methods:
