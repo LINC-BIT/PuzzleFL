@@ -148,6 +148,7 @@ Our system not only implements PuzzleFL, but also implements classic and latest 
 - **[FedIR](https://ieeexplore.ieee.org/abstract/document/9944948/)** : This paper is from TMC(Volume: 23, 2024). It introduces a novel method that leverages a two-stage optimization approach to balance system latency and energy consumption in federated learning, wherein local models are updated collaboratively through a distributed consensus mechanism without a central server.
 ### 4.2 Method usage
 You can find the "main" file in the "baselines" folder corresponding to each method, and then run the method according to the following command
+
 	```shell
  	cd baselines
   	cd XXX  # method name
@@ -165,6 +166,7 @@ You can find the "main" file in the "baselines" folder corresponding to each met
 
 ### 5.2 Method usage
 You can find the "main" file in the "baselines" folder corresponding to each method, and then run the method according to the following command
+
 	```shell
  	cd baselines
   	cd XXX  # method name
