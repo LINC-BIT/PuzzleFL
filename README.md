@@ -16,7 +16,7 @@
 - [6 Experiments setting](#6-Experiments-setting)
   * [6.1 Generate task](#61-Generate-task)
   * [6.2 Selection of model](#62-Selection-of-model)
-- [7 Experiments](#7-Experiments)
+- [7 Experiment](#7-Experiment)
   * [7.1 Running on Cifar100](#71-under-different-workloads-model-and-dataset)
   * [7.2 Running on MiniImageNet](#72-under-different-network-bandwidths)
   * [7.3 Running on TinyImageNet](#73-large-scale)
