@@ -1,5 +1,7 @@
 # PuzzleFL
 
+![](https://github.com/LINC-BIT/PuzzleFL/overview.pdf)
+
 ## Table of contents
 - [1 Introduction](#1-introduction)
 - [2 How to get started](#2-how-to-get-started)
@@ -9,8 +11,6 @@
   * [3.1 Image classification](#31-Image-classification)
   * [3.2 Text classification](#32-Text-classification)
   * [3.3 Graph classification](#33-Graph-classification)
-  * [3.4 Image-Text matching](#34-Image-Text-matching)
-  * [3.5 Time-series data forecasting](#35-Time-series-data-forecasting)
 - [4 Supported FL methods](#4-Supported-FL-methods)
 - [5 Supported FCL methods](#5-Supported-FCL-methods)
 - [6 Experiments setting](#6-Experiments-setting)
@@ -27,7 +27,10 @@
 - [8 Citations](#8-citation)
 
 ## 1 Introduction
+PuzzleFL is a novel decentralized federated continual learning algorithm that addresses the challenges of communication efficiency and heterogeneous task knowledge transfer in decentralized federated learning. It tackles the limitations of prior approaches that primarily aggregate clients' latest models while neglecting knowledge from historical task sequences. The core innovation lies in its Task-Specific Knowledge (TSK) structure, which compactly represents task sequences through accuracy-adaptive weight preservation and enables efficient cross-client task matching for collaborative knowledge transfer.
+
 PuzzleFL is designed to achieve SOTA performance (accuracy, time, and communication cost etc.) in decetralized federated continual learning setting. It currently supports six differnet networks of image/text classification: ResNet, MobiNet, DenseNet, ViT, RNN, LSTM and Bert. 
+
 - [ResNet](https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html): this model consists of multiple convolutional layers and pooling layers that extract the information in image. Typically, ResNet suffers from gradient vanishing (exploding) and performance degrading when the network is  deep. ResNet thus adds BatchNorm to alleviate gradient vanishing (exploding) and adds residual connection to alleviate the performance degrading.
 - [MobileNet](https://arxiv.org/abs/1801.04381): MobileNet is a lightweight convolutional network which widely uses the depthwise separable convolution.
 - [DenseNet](https://arxiv.org/pdf/1707.06990.pdf): DenseNet extends ResNet by adding connections between each blocks to aggregate all multi-scale features.
@@ -108,44 +111,32 @@ Arguments:
 ### 3.1 Image classification
 ||Model Name|Data|Script|
 |--|--|--|--|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[6 layer_CNN (NeurIPS'2020)](https://proceedings.neurips.cc/paper/2020/hash/258be18e31c8188555c2ff05b4d542c3-Abstract.html) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Cifar100](http://www.cs.toronto.edu/~kriz/cifar.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;<br>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[MiniImageNet](https://proceedings.neurips.cc/paper/2020/hash/258be18e31c8188555c2ff05b4d542c3-Abstract.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;| &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/ResNet.sh) &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|
+|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[6 layer_CNN (NeurIPS'2020)](https://proceedings.neurips.cc/paper/2020/hash/258be18e31c8188555c2ff05b4d542c3-Abstract.html) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Cifar100](http://www.cs.toronto.edu/~kriz/cifar.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;<br>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[MiniImageNet](https://proceedings.neurips.cc/paper/2020/hash/258be18e31c8188555c2ff05b4d542c3-Abstract.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;| &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/sixcnn.sh) &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; |
 |&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[ResNet (CVPR'2016)](https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;[MiniImageNet](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;<br>&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[TinyImageNet](http://cs231n.stanford.edu/tiny-imagenet-200.zip) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;| &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/ResNet.sh) &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|
 |&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[MobileNetV2 (CVPR'2018)](https://openaccess.thecvf.com/content_cvpr_2018/html/Sandler_MobileNetV2_Inverted_Residuals_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;[MiniImageNet](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/MobileNet.sh) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|
 |&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[DenseNet(CVPR'2017)](https://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;[MiniImageNet](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/DenseNet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[ViT(ICLR'2021)](https://iclr.cc/virtual/2021/oral/3458) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;[TinyImageNet](http://cs231n.stanford.edu/tiny-imagenet-200.zip) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/DenseNet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;|
+|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[ViT(ICLR'2021)](https://iclr.cc/virtual/2021/oral/3458) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;[TinyImageNet](http://cs231n.stanford.edu/tiny-imagenet-200.zip) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/ViT.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;|
 
 ### 3.2 Text classification
 ||Model Name|Data|Script|
 |--|--|--|--|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[RNN (CVPR'2018)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ASC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[LSTM (CVPR'2018)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ASC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;Bert (NAACL'2019)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[DSC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
+|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[RNN (CVPR'2018)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ASC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/RNN.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
+|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[LSTM (CVPR'2018)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ASC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/LSTM.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
+|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;Bert (NAACL'2019)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[DSC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/Bert.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
 
 ### 3.3 Graph classification
 ||Model Name|Data|Script|
 |--|--|--|--|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;[GCN (ICLR'2017)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MiniGC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;[GAT (ICLR'2018)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MiniGC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
+|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;[GCN (ICLR'2017)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MiniGC](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/GCN.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
 
-### 3.4 Image-Text matching
-||Model Name|Data|Script|
-|--|--|--|--|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[CLIP-RN50 (ICML'2021)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Cifar100-Text](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;[CLIP-ViT-B/3 (ICML'2021)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Cifar100-Text](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
-
-### 3.5 Time-series data forecasting
-||Model Name|Data|Script|
-|--|--|--|--|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;[Infomer (AAAI'2021)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; [Energy-IES](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
-|&nbsp; &nbsp; &nbsp; &nbsp;&#9745;&nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;[Wavenet (IJCAI'2021)](https://openaccess.thecvf.com/content_cvpr_2018/html/Hu_Squeeze-and-Excitation_Networks_CVPR_2018_paper.html) &nbsp; &nbsp; &nbsp; &nbsp;|&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Energy-IES](https://image-net.org/download.php) &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;|&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;[Demo](scripts/models/SENet.sh)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;|
 ## 4 Supported FL methods
 ### 4.1 Method introduction
 Our system not only implements PuzzleFL, but also implements classic and latest federated learning algorithms(Centralization or Decentralization), mainly including the following:
-- **[PENS](https://arxiv.org/abs/2107.08517)**: The paper is from ICML(2018). It presents the Performance-Based Neighbor Selection (PENS) method, where clients in a decentralized federated learning system evaluate training losses on each other’s data to identify peers with similar data distributions. This targeted peer selection enables clients to collaboratively update their models in a fully decentralized manner.
-- **[HDFL](https://ieeexplore.ieee.org/abstract/document/10226164)**: The paper is from INFOCOM(2023). It introduces an integrated hierarchically decentralized federated learning (HDFL) framework where devices in different cells periodically achieve intra-cell D2D consensus followed by inter-cell aggregation to collaboratively train a global model. This hierarchical method is designed to optimize convergence while balancing communication and energy overhead in multicell scenarios.
-- **[FedPC](https://openaccess.thecvf.com/content/CVPR2023W/AICity/html/Yuan_Peer-to-Peer_Federated_Continual_Learning_for_Naturalistic_Driving_Action_Recognition_CVPRW_2023_paper.html)**: This paper is from CVPR(2023). It proposes a novel peer-to-peer federated continual learning framework that enables clients to continuously update their local models using streaming driving data and directly exchange model updates with peers, thereby eliminating the need for a central server.
-- **[DPFL](https://ieeexplore.ieee.org/abstract/document/9993756/)** : This paper is from TMC(Volume: 23, 2024). It presents an integrated hierarchically decentralized federated learning framework for 6G wireless networks, where devices in each cell periodically reach D2D consensus before participating in inter-cell aggregation to jointly train a global model while optimizing the convergence rate and communication-energy trade-off.
-- **[FedIR](https://ieeexplore.ieee.org/abstract/document/9944948/)** : This paper is from TMC(Volume: 23, 2024). It introduces a novel method that leverages a two-stage optimization approach to balance system latency and energy consumption in federated learning, wherein local models are updated collaboratively through a distributed consensus mechanism without a central server.
+- **[PENS](https://arxiv.org/abs/2107.08517)**: The paper is from ICML(2018). It presents the Performance-Based Neighbor Selection (PENS) method, where clients in a decentralized federated learning system evaluate training losses on each other’s data to identify peers with similar data distributions. This targeted peer selection enables clients to collaboratively update their models in a fully decentralized manner. You can find the method description [here](Baselines/PENS)
+- **[HDFL](https://ieeexplore.ieee.org/abstract/document/10226164)**: The paper is from INFOCOM(2023). It introduces an integrated hierarchically decentralized federated learning (HDFL) framework where devices in different cells periodically achieve intra-cell D2D consensus followed by inter-cell aggregation to collaboratively train a global model. This hierarchical method is designed to optimize convergence while balancing communication and energy overhead in multicell scenarios. You can find the method description [here](Baselines/HDFL)
+- **[FedPC](https://openaccess.thecvf.com/content/CVPR2023W/AICity/html/Yuan_Peer-to-Peer_Federated_Continual_Learning_for_Naturalistic_Driving_Action_Recognition_CVPRW_2023_paper.html)**: This paper is from CVPR(2023). It proposes a novel peer-to-peer federated continual learning framework that enables clients to continuously update their local models using streaming driving data and directly exchange model updates with peers, thereby eliminating the need for a central server. You can find the method description [here](Baselines/FedPC)
+- **[DPFL](https://ieeexplore.ieee.org/abstract/document/9993756/)** : This paper is from TMC(Volume: 23, 2024). It presents an integrated hierarchically decentralized federated learning framework for 6G wireless networks, where devices in each cell periodically reach D2D consensus before participating in inter-cell aggregation to jointly train a global model while optimizing the convergence rate and communication-energy trade-off. You can find the method description [here](Baselines/DPFL)
+- **[FedIR](https://ieeexplore.ieee.org/abstract/document/9944948/)** : This paper is from TMC(Volume: 23, 2024). It introduces a novel method that leverages a two-stage optimization approach to balance system latency and energy consumption in federated learning, wherein local models are updated collaboratively through a distributed consensus mechanism without a central server. You can find the method description [here](Baselines/FedIR)
 ### 4.2 Method usage
 You can find the "main" file in the "baselines" folder corresponding to each method, and then run the method according to the following command
 
@@ -154,15 +145,16 @@ You can find the "main" file in the "baselines" folder corresponding to each met
   	cd XXX  # method name
 	python mainXXX.py --task_number=10 --class_number=100 --dataset=cifar100
 	```
+
 ## 5 Supported FCL methods
 ### 5.1 Method introduction
-- **[FedKNOW](https://ieeexplore.ieee.org/abstract/document/10184531/)**: This paper is from ICDE(2023). It introduces a novel communication-efficient federated learning algorithm that employs adaptive gradient quantization and selective client aggregation to dynamically adjust model updates based on network conditions and client heterogeneity, thereby reducing communication overhead while accelerating convergence.
-- **[FedViT](https://www.sciencedirect.com/science/article/abs/pii/S0167739X23004879)**: This paper is from Future Generation Computer Systems (Volume: 154, 2024). It presents a novel integrated optimization framework that combines advanced machine learning with heuristic search methods to dynamically optimize complex industrial systems through adaptive, iterative parameter tuning.
-- **[FedCL](https://ieeexplore.ieee.org/abstract/document/9190968/)**: This paper is from ICIP (2020). It proposes a novel federated learning framework that integrates blockchain technology to ensure secure and decentralized model updates among clients, thereby enhancing data privacy and system robustness.
-- **[FedWEIT](https://proceedings.mlr.press/v139/yoon21b.html?ref=https://githubhelp.com)** : This paper is from ICML(2021). It introduces a novel approach that leverages self-supervised learning to enhance the performance of few-shot learning models by effectively utilizing unlabeled data during the meta-training phase.
-- **[Cross-FCL](https://ieeexplore.ieee.org/abstract/document/9960821/)**: This paper is from TMC(Volume: 23, 2024). It proposes a novel federated learning framework that integrates blockchain technology to ensure secure and decentralized model updates among clients, thereby enhancing data privacy and system robustness.
-- **[TFCL](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Traceable_Federated_Continual_Learning_CVPR_2024_paper.html)** : This paper is from CVPR(2024). It proposes a novel Traceable Federated Continual Learning (TFCL) paradigm, introducing the TagFed framework that decomposes models into marked sub-models for each client task, enabling precise tracing and selective federation to handle repetitive tasks effectively.
-- **[Loci](https://ieeexplore.ieee.org/abstract/document/10857343/)**: This paper is from TPDS(Volume 36, 2025)  It proposes Loci to provide abstractions for clients’ past and peer task knowledge using compact model weights, and develop a communication-efficient approach to train each client’s local model by exchanging its tasks’ knowledge with the most accuracy relevant one from other clients.
+- **[FedKNOW](https://ieeexplore.ieee.org/abstract/document/10184531/)**: This paper is from ICDE(2023). It introduces a novel communication-efficient federated learning algorithm that employs adaptive gradient quantization and selective client aggregation to dynamically adjust model updates based on network conditions and client heterogeneity, thereby reducing communication overhead while accelerating convergence. You can find the method description [here](Baselines/FedKNOW)
+- **[FedViT](https://www.sciencedirect.com/science/article/abs/pii/S0167739X23004879)**: This paper is from Future Generation Computer Systems (Volume: 154, 2024). It presents a novel integrated optimization framework that combines advanced machine learning with heuristic search methods to dynamically optimize complex industrial systems through adaptive, iterative parameter tuning. You can find the method description [here](Baselines/FedViT)
+- **[FedCL](https://ieeexplore.ieee.org/abstract/document/9190968/)**: This paper is from ICIP (2020). It proposes a novel federated learning framework that integrates blockchain technology to ensure secure and decentralized model updates among clients, thereby enhancing data privacy and system robustness. You can find the method description [here](Baselines/FedCL)
+- **[FedWEIT](https://proceedings.mlr.press/v139/yoon21b.html?ref=https://githubhelp.com)** : This paper is from ICML(2021). It introduces a novel approach that leverages self-supervised learning to enhance the performance of few-shot learning models by effectively utilizing unlabeled data during the meta-training phase. You can find the method description [here](Baselines/WEIT)
+- **[Cross-FCL](https://ieeexplore.ieee.org/abstract/document/9960821/)**: This paper is from TMC(Volume: 23, 2024). It proposes a novel federated learning framework that integrates blockchain technology to ensure secure and decentralized model updates among clients, thereby enhancing data privacy and system robustness. You can find the method description [here](Baselines/Cross_FCL)
+- **[TFCL](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_Traceable_Federated_Continual_Learning_CVPR_2024_paper.html)** : This paper is from CVPR(2024). It proposes a novel Traceable Federated Continual Learning (TFCL) paradigm, introducing the TagFed framework that decomposes models into marked sub-models for each client task, enabling precise tracing and selective federation to handle repetitive tasks effectively. You can find the method description [here](Baselines/TFCL)
+- **[Loci](https://ieeexplore.ieee.org/abstract/document/10857343/)**: This paper is from TPDS(Volume 36, 2025)  It proposes Loci to provide abstractions for clients’ past and peer task knowledge using compact model weights, and develop a communication-efficient approach to train each client’s local model by exchanging its tasks’ knowledge with the most accuracy relevant one from other clients. You can find the method description [here](Baselines/Loci)
 
 ### 5.2 Method usage
 You can find the "main" file in the "baselines" folder corresponding to each method, and then run the method according to the following command
@@ -473,7 +465,8 @@ The citations of the baseline methods in `baselines/` are listed as follows:
     year={2017},
     organization={PMLR}
     }
-
+```
+    
 - PENS
     ```bibtex
     @article{onoszko2021decentralized,
@@ -482,7 +475,8 @@ The citations of the baseline methods in `baselines/` are listed as follows:
     journal={arXiv preprint arXiv:2107.08517},
     year={2021}
     }
-
+```
+    
 - FedHP 
     ```bibtex
     @inproceedings{liao2023adaptive,
@@ -493,6 +487,7 @@ The citations of the baseline methods in `baselines/` are listed as follows:
     year={2023},
     organization={IEEE}
     }
+    ```
 
 
 - HDFL 
@@ -505,6 +500,7 @@ The citations of the baseline methods in `baselines/` are listed as follows:
     year={2023},
     organization={IEEE}
     }
+    ```
 
 #### FCL methods:
 
@@ -518,6 +514,7 @@ The citations of the baseline methods in `baselines/` are listed as follows:
     year={2021},
     organization={PMLR}
     }
+    ```
 
 
 - FedKNOW
@@ -530,6 +527,7 @@ The citations of the baseline methods in `baselines/` are listed as follows:
     year={2023},
     organization={IEEE}
     }
+    ```
 
 
 - FedViT
@@ -543,3 +541,4 @@ The citations of the baseline methods in `baselines/` are listed as follows:
     year={2024},
     publisher={Elsevier}
     }
+    ```
