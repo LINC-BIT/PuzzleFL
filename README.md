@@ -1,6 +1,6 @@
 # PuzzleFL
 
-![](https://github.com/LINC-BIT/PuzzleFL/blob/main/overview.pdf)
+![](https://github.com/LINC-BIT/PuzzleFL/blob/main/overview.png)
 
 ## Table of contents
 - [1 Introduction](#1-introduction)
